@@ -6,7 +6,7 @@
 
 {% block content %}
   <h1>{{ title }}</h1>
-  {% for post_count in page_obj %}
+  {%for post_count in page_obj%}
     <ul>
       <li>
         Автор: {{ post_count.author.get_full_name }}
