@@ -1,3 +1,4 @@
+import io
 import os
 import sys
 from typing import Tuple
@@ -66,9 +67,11 @@ def look_line(str):
     TAGS_DICT = tags_in_str(str)
     for tag in TAGS_DICT:
         tags.append(tag)
-    print(f'Тэги которые у нас есть {tags}')
+    if not tags:
+        return str
+    #print(f'Тэги которые у нас есть {tags}')
 
-    def making_space_in_line(line: str) -> str:
+    def making_space_in_line(line) -> str:
         '''
         Тут делаем пробелы, там, где это надо (в строке HTML кода)
         Не трогайте эту функцию!!!, я з@_б@лсi ее дебажить!!
@@ -78,7 +81,7 @@ def look_line(str):
             Добавляем пробелы
             '''
             out = []
-            print(f'в add_space предано: {tuple}')
+            #print(f'в add_space предано: {tuple}')
             # Пробел после тэга
             if '{' in tag:
                 out.append(tuple[0])
@@ -86,61 +89,61 @@ def look_line(str):
                     for count in tuple[1:]:
                         if count.startswith(space):
                             out.append(count)
-                            print(f'принт из if {out}')
+                           # print(f'принт из if {out}')
                         else:
                             # Тут у меня закончилась фантазия на названия
                             stroka = space + count
                             out.append(stroka)
-                            print(f'принт из элс {out}')
-                else: print(f'ну мы просто пропустили {tag}')
+                           # print(f'принт из элс {out}')
+                #else: print(f'ну мы просто пропустили {tag}')
             # Пробел перед тэгом
             elif tag[-1] == '}':
                 for count in tuple[:-1]:
                     if count.endswith(space):
                         out.append(count)
-                        print(f'принт из if в elif{out}')
+                       # print(f'принт из if в elif{out}')
                     else:
                         stroka = count + space
                         out.append(stroka)
-                        print(f'принт из else в elif{out}')
+                       # print(f'принт из else в elif{out}')
                 out.append(tuple[-1])
-                print(f'out в конце elif {out}')
-            print(f'out в конце САМОМ {out}')
+               # print(f'out в конце elif {out}')
+            #print(f'out в конце САМОМ {out}')
             return out
 
         for tag in TAGS_DICT:
-            print(f'Тэг который щас {tag}, значение: {TAGS_DICT[tag]}')
+            #print(f'Тэг который щас {tag}, значение: {TAGS_DICT[tag]}')
             if TAGS_DICT[tag] == False:
                 if tag in line:
                     splited_line = line.split(tag)
-                    print(f'splited_line, до вызова функции {splited_line}')
+                    #print(f'splited_line, до вызова функции {splited_line}')
                     # Добавляем пробелы, если нужны
                     splited_line = add_space(splited_line, tag)
-                    print(f'splited_line, ПОСЛЕ! вызова функции {splited_line}')
+                    #print(f'splited_line, ПОСЛЕ! вызова функции {splited_line}')
                     TAGS_DICT[tag] = True
                     
                     # Похоже, тут без рекурсии никак
                     out = f'{tag}'.join(splited_line)
-                    print(f'tmp: {out}')
+                    #print(f'tmp: {out}')
                     # Надо проверять, когда перестать уходить в рекурсию!
                     if not all(TAGS_DICT.values()):
                         out = making_space_in_line(out)
-                    print(f'out: {out}')
+                    #print(f'out: {out}')
                     return out
-            else: print('НЕопознаный тег')
+            #else: print('НЕопознаный тег')
     return making_space_in_line(str)
 
 
 
 
-str = '   {{q21 }}'
+str = '        {%endblock %}\n'
 print (f'ВОООООТ: {look_line(str)}')
 print (f'А ввели мы {str}')
 
 
 
-# str = "{{ post_count.text|linebreaks }}"
-# print (f'ВОООООТ: {making_space_in_line(str)}')
+# str = "{{post_count.text|linebreaks }}"
+# print (f'ВОООООТ: {look_line(str)}')
 # print (f'А ввели мы {str}')
 
 
@@ -150,16 +153,23 @@ def checking_templates():
     errors = {'Путь': ['список','твоих', 'косяков']}
     #print(errors)
     for file in all_HTML_files:
-        f = open(file, "r")
+        f = io.open(file, mode="r", encoding="utf-8")
+        #f = open(file, "r")
+        out_file = open('out.txt', "w")
         while True:
             # считываем строку
             lines_with_errors = []
             line = f.readline()
-            print(line)
-            new_line = making_space_in_line(line)
-            print(new_line)
-            if line != new_line:
-                lines_with_errors.append(line)
+            print(f'Вот наша строка из исходника: {line}')
+            #print(f'До: {line}' )
+            new_line = look_line(line)
+            print(f'После: {new_line}')
+            print(f'Тип: {type(new_line)}')
+                
+            out_file.writelines(new_line)
+
+            # if line != new_line:
+            #     lines_with_errors.append(line)
 
                 # if file in errors:
                 #     errors[file] .append(1)
@@ -169,12 +179,14 @@ def checking_templates():
             if not line:
                 errors[file] = lines_with_errors
                 break
-            # выводим строку
-            print( type(line))
-        print(errors)
-        f.close()
 
-#checking_templates()
+            # выводим строку
+            #print( type(line))
+        #print(errors)
+        f.close()
+        out_file.close()
+
+checking_templates()
 
 def parser_HTML():
     pass
