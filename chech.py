@@ -11,6 +11,7 @@ BASE_DIR = os.path.dirname(__file__)
 # Тэги, которые мы ищим, что бы добавить пробел
 TAGS = ['{%', '{{', '}}', '%}', '{#', '#}']
 # !!!!!!!!!!
+
 def tags_in_str(str) -> Dict:
     tmp = []
     for tag in TAGS:
