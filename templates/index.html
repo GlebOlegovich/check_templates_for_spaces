@@ -20,16 +20,16 @@
       href="{% url 'posts:post_detail' post_count.id %}">
       подробная информация
     </a>
-    {%if post_count.group_id%}
+    {% if post_count.group_id %}
       <a class="btn btn-danger"
         href="{% url 'posts:group_posts' post_count.group.slug %}">
         {# Вот тут показан пример работы метода __str__ модели групп #}
         Все записи группы {{ post_count.group }}
       </a>
-    {%endif%}
+    {% endif %}
     <!-- Если не последняя запись из Posts, то добавляем <hr> --> 
     {% if not forloop.last %}<hr>{% endif %} 
-    {%comment%}
+    {% comment %}
       Если есть группа, то добавляем <br>x2, что бы кнопка не упиралась в футер
       В примере оформления ссылка упирается в футер, решил сделать
       немного покрасивее, что бы не упиралась сразу в футер
