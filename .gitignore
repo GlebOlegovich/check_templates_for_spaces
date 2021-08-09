@@ -1,5 +1,5 @@
 chech_test copy.py
-template/
+templates/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
