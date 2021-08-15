@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <aside class="col-12 col-md-3">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          Дата публикации: {{ post.pub_date|date:"d E Y" }}
+          Время публикации: {{ post.pub_date|time:"H:i" }}
+        </li>
+        <li class="list-group-item">
+          {% if post.group_id %}
+            Группа : {{ post.group }}
+            <a class="btn btn-danger"
+              href="{% url 'posts:group_list' post.group.slug %}">
+              Все записи группы
+            </a>
+          {% endif %}
+        </li>
+        <li class="list-group-item">
+          Автор:
+          {% if post.author.get_full_name %}
+            {{ post.author.get_full_name }}
+          {% else %}
+            {{ post.author.username }}
+          {% endif %}
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Всего постов автора:  {{ author_posts_count }}
+        </li>
+        {% if post.author.get_full_name == user.get_full_name %} 
+          <li class="list-group-item">
+            <a class="btn btn-danger" href="{% url 'posts:profile' post.author.username %}">
+              Ваш профиль
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a class="btn btn-danger" href="{% url 'posts:post_edit' post.id %}">
+              Редактировать этот пост
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a class="btn btn-danger" href="{% url 'posts:delete_post' post.id %}">
+              Решили удалить пост? Жмите сюда, но учтите, он удалится навсегда!
+            </a>
+          </li>
+        {% else %} 
+          <li class="list-group-item">
+            <a class="btn btn-danger" href="{% url 'posts:profile' post.author.username %}">
+              все посты пользователя
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </aside>
+    <article class="col-12 col-md-9">
+      <p>
+        {{ post.text }}
+      </p>
+    </article>
+  </div>
+  <br>
+{% endblock %}

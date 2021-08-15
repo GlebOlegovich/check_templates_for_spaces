@@ -39,9 +39,9 @@ def selected_templates_dir() -> str:
         print(f'В папке {BASE_DIR}, где лежит {os.path.basename(__file__)}, нету каталога templates')
         print(f'Хотите ввести свое название директории (введите любое значение)?\n'
               f'Если не хотите, просто нажмите Enter\n Так что там с вводом,а кожаный мешок ?\n')
-        input = input("Ввод: ")
-        if input:
-            templates_dir = os.path.join(BASE_DIR, input)
+        from_input = input("Ввод: ")
+        if from_input:
+            templates_dir = os.path.join(BASE_DIR, from_input)
             print(f"Ну, давай создадим\n Теперь путь до папки с html шаблонами: {templates_dir}")
 
         else:

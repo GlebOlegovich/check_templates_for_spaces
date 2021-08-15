@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Профайл пользователя {{ cur_profile.first_name }} {{cur_profile.last_name}}
+{% endblock %}
+
+{% block content %}
+
+  <div class="container py-5">
+    <h1>Все посты пользователя: 
+      {% if cur_profile.get_full_name %}
+        {{ cur_profile.get_full_name }}
+      {% else %}
+        {{ cur_profile.username}}
+      {% endif %}
+    </h1>
+    <h3>Всего постов: {{ count_posts }} </h3>
+    {% for post_of_user in page_obj %}
+    <article>
+      <ul>
+          <li>
+            Дата публикации: {{ post_of_user.pub_date|date:"d E Y" }}
+          </li>
+    </article> 
+    <p>{{ post_of_user.text|linebreaks }}</p>
+    <a class="btn btn-danger"
+        href="{% url 'posts:post_detail' post_of_user.id %}">
+        подробная информация
+      </a>
+    {% if post_of_user.group_id %}
+      <a class="btn btn-danger"
+        href="{% url 'posts:group_list' post_of_user.group.slug %}">
+        {# Вот тут показан пример работы метода __str__ модели групп #}
+        Все записи группы {{ post_of_user.group }}
+      </a>
+    {% endif %}
+    <!-- Остальные посты. после последнего нет черты -->
+     {% if not forloop.last %}<hr>{% endif %} 
+     {% if post_of_user.group_id %}<br><br>{% endif %}
+    {% endfor %}
+    <!-- Здесь подключён паджинатор -->  
+    {% include 'posts/includes/paginator.html' %}
+  </div>
+
+{% endblock %}
