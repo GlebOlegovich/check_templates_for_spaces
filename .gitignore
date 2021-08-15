@@ -1,6 +1,7 @@
 .vscode
 check_test_copy.py
 templates/
+templatess/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

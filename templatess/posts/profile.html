@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  Профайл пользователя {{ cur_profile.first_name }} {{cur_profile.last_name}}
+  Профайл пользователя {{ cur_profile.first_name }} {{ cur_profile.last_name }}
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@
       {% if cur_profile.get_full_name %}
         {{ cur_profile.get_full_name }}
       {% else %}
-        {{ cur_profile.username}}
+        {{ cur_profile.username }}
       {% endif %}
     </h1>
     <h3>Всего постов: {{ count_posts }} </h3>
